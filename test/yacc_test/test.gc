@@ -1,0 +1,6 @@
+func main(a int)(ret int)
+{
+    float a1;
+    a1 = 1.0;
+    return 0;
+}
