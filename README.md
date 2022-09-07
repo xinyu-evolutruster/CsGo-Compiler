@@ -58,8 +58,6 @@ clang {filename}.o -o filename.out
 
   - ast.cpp: 
     implements the AST
-
-  - CodeGenerator.h: 中间代码生成器头文件，定义生成器环境
   
   - CodeGenerator.cpp: generates the intermediate representation
   
