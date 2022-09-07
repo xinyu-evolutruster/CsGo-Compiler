@@ -1,0 +1,49 @@
+#define INC(x) x=x+1
+#define DEC(x) x=x-1
+func qsort(arr[] int, begin int, end int)(void){
+    if(begin<end){
+        int i;
+        int j;
+        int key;
+        i, j, key = begin, end, arr[begin];
+        while(i<j){
+            while(i<j && arr[j]>key){
+                DEC(j);
+            }
+            if(i<j){
+                arr[i]=arr[j];
+                INC(i);
+            }
+            while(i<j && arr[i]<key){
+                INC(i);
+            }
+            if(i<j){
+                arr[j]=arr[i];
+                DEC(j);
+            }
+        }
+        arr[i]=key;
+        qsort(arr[], begin, i-1);
+        qsort(arr[], i+1, end);
+    }
+    return;
+}
+
+func main(void)(ret int){
+    int arr[10000];
+    int len;
+    int i;
+    scanf("%d",len);
+    i=0;
+    while(i<len){
+        scanf("%d",arr[i]);
+        INC(i);
+    }
+    qsort(arr[], 0, len-1);
+    i=0;
+    while(i<len){
+        printf("%d\n",arr[i]);
+        INC(i);
+    }
+    return 0;
+}

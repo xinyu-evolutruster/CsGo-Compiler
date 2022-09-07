@@ -1,0 +1,470 @@
+#define COURSE_SIZE 12800
+#define INPUT_LEN   20000
+#define LENGTH      2560
+#define AND         ','
+#define OR          ';'
+#define SAME_STR    1
+#define DIFF_STR    0
+
+func to_decimal(courses[] char, pos1 int, pos2 int)(ret int)
+{
+    int res;
+    int p;
+    int tmp;
+    
+    res = 0;
+    p = pos1 + 1;
+
+    while(p < pos2) {
+        if (courses[p] == '0') {tmp = 0;}
+        else if (courses[p] == '1') {tmp = 1;}
+        else if (courses[p] == '2') {tmp = 2;}
+        else if (courses[p] == '3') {tmp = 3;}
+        else if (courses[p] == '4') {tmp = 4;}
+        else if (courses[p] == '5') {tmp = 5;}
+        else if (courses[p] == '6') {tmp = 6;}
+        else if (courses[p] == '7') {tmp = 7;}
+        else if (courses[p] == '8') {tmp = 8;}
+        else if (courses[p] == '9') {tmp = 9;}
+        res = res * 10 + tmp;
+        p = p + 1;
+    }
+    return res;
+}
+
+func to_float(courses[] char, pos1 int, pos2 int)(ret float)
+{
+    float res;
+    int p;
+    float tmp;
+    
+    res = 0.0;
+    p = pos1 + 1;
+
+    while(p < pos2) {
+        if (courses[p] == '0') {tmp = 0.0;}
+        else if (courses[p] == '1') {tmp = 1.0;}
+        else if (courses[p] == '2') {tmp = 2.0;}
+        else if (courses[p] == '3') {tmp = 3.0;}
+        else if (courses[p] == '4') {tmp = 4.0;}
+        else if (courses[p] == '5') {tmp = 5.0;}
+        else if (courses[p] == '6') {tmp = 6.0;}
+        else if (courses[p] == '7') {tmp = 7.0;}
+        else if (courses[p] == '8') {tmp = 8.0;}
+        else if (courses[p] == '9') {tmp = 9.0;}
+        res = res * 10.0 + tmp;
+        p = p + 1;
+    }
+    return res;
+}
+
+func strcmp(str1[] char, str2[] char, len1 int, len2 int)(ret int)
+{
+    int i;
+    int res;
+
+    res = SAME_STR;
+
+    if (len1 != len2) {
+        res = DIFF_STR;    
+    }
+    else {
+        i = 0;
+        while (i < len1) {
+            if (str1[i] != str2[i]) {
+                res = DIFF_STR;
+                i = len1;
+            }
+            else {
+                i = i + 1;
+            }
+        }
+    }
+    return res;
+}
+
+func get_grade(courses[] char, pos1 int, pos2 int)(ret float)
+{
+    int p;
+    float res;
+
+    p = pos1 + 1;
+
+    if (courses[p] == 'A') {res = 4.0;}
+    else if (courses[p] == 'B') {res = 3.0;}
+    else if (courses[p] == 'C') {res = 2.0;}
+    else if (courses[p] == 'D') {res = 1.0;}
+    else if (courses[p] == 'F') {res = 0.0;}
+
+    return res;
+}
+
+func calc_gpa(courses[] char, length[] int, cnt int)(void)
+{
+    int i;
+    int pos1;
+    int pos2;
+    int flag;
+    float tmp;
+    float grade;
+    float attempted;
+    float gpa;
+
+    i = 0;
+    flag = 0;
+    attempted = 0.0;
+    gpa = 0.0;
+
+    while(i < cnt) {
+        pos1 = i * 4 + 2;
+        pos2 = i * 4 + 3;
+        pos1 = length[pos1];
+        pos2 = length[pos2];
+
+        if (pos2 - pos1 != 1) {
+            flag = 1;
+            grade = get_grade(courses[], pos1, pos2);
+            pos1 = i * 4 + 0;
+            pos2 = i * 4 + 1;
+            pos1 = length[pos1];
+            pos2 = length[pos2];
+            tmp = to_float(courses[], pos1, pos2);
+            attempted = attempted + tmp;
+            gpa = gpa + tmp * grade;
+        }
+        i = i + 1;
+    }
+
+    if (flag == 0) { gpa = 0.0; }
+    else { gpa = gpa / attempted; }
+    printf("GPA: %.1f\n", gpa);
+    return;
+}
+
+func hours_attempted(courses[] char, length[] int, cnt int)(ret int)
+{
+    int hours;
+    int tmp;
+    int i;
+    int pos1;
+    int pos2;
+
+    i = 0;
+    hours = 0;
+
+    while(i < cnt) {
+        pos1 = i * 4 + 2;
+        pos2 = i * 4 + 3;
+        pos1 = length[pos1];
+        pos2 = length[pos2];
+        if (pos2 - pos1 != 1) {
+            pos1 = i * 4 + 0;
+            pos2 = i * 4 + 1;
+            pos1 = length[pos1];
+            pos2 = length[pos2];
+            tmp = to_decimal(courses[], pos1, pos2);
+            hours = hours + tmp;
+        }
+        i = i + 1;
+    }
+
+    printf("Hours Attempted: %d\n", hours);
+    return hours;
+}
+
+func hours_completed(courses[] char, length[] int, cnt int)(ret int)
+{
+    int hours;
+    int tmp;
+    int i;
+    int pos1;
+    int pos2;
+
+    i = 0;
+    hours = 0;
+
+    while(i < cnt) {
+        pos1 = i * 4 + 2;
+        pos2 = i * 4 + 3;
+        pos1 = length[pos1];
+        pos2 = length[pos2];
+        if (pos2 - pos1 != 1) {
+            pos1 = pos1 + 1;
+            if (courses[pos1] != 'F') {
+                pos1 = i * 4 + 0;
+                pos2 = i * 4 + 1;
+                pos1 = length[pos1];
+                pos2 = length[pos2];
+                tmp = to_decimal(courses[], pos1, pos2);
+                hours = hours + tmp;
+            }
+        }
+        i = i + 1;
+    }
+
+    printf("Hours Completed: %d\n", hours);
+    return hours;
+}
+
+func credits_remaining(courses[] char, length[] int, cnt int, completed int)(ret int)
+{
+    int credits;
+    int tmp;
+    int i;
+    int pos1;
+    int pos2;
+
+    i = 0;
+    credits = 0;
+
+    while(i < cnt) {
+        pos1 = i * 4 + 0;
+        pos2 = i * 4 + 1;
+        pos1 = length[pos1];
+        pos2 = length[pos2];
+        tmp = to_decimal(courses[], pos1, pos2);
+        credits = credits + tmp;
+        i = i + 1;
+    }
+    credits = credits - completed;
+
+    printf("Credits Remaining: %d\n", credits);
+    return credits;
+}
+
+func check_courses(input[] char, completed_courses[] char, completed_num int)(ret int)
+{
+    int i;
+    int j;
+    int pos;
+    int flag;
+    int res;
+
+    i, j = 0, 0;
+    pos = 0;
+    flag = 0;
+    res = 0;
+
+    if (input[0] == '\0') {
+        res = 0;
+    }
+    else {
+        while(i < completed_num && res == 0) {
+            j = 0;
+            flag = 0;
+            while (completed_courses[pos] != '\0' && flag != 1) {
+                if(input[j]=='\0'){
+                    flag = 1;
+                }
+                if (input[j] != completed_courses[pos]) {
+                    flag = 1;
+                }
+                
+                j = j + 1;
+                pos = pos + 1;
+            }
+            if (flag == 1) {
+                while (completed_courses[pos] != '\0') {
+                    pos = pos + 1;
+                }
+                res = 0;
+            }
+            else {
+                if(input[j]!='\0'){
+                    res = 0;
+                }else{
+                    res = 1;
+                }
+            }
+            
+            pos = pos + 1;
+            i = i + 1;
+        }
+    }
+    return res;
+}
+
+func courses_to_take(courses[] char, length[] int, cnt int)(void)
+{
+    int i;
+    int j;
+    int k;
+    int pos1;
+    int pos2;
+    int can_take; 
+    int res;
+    int completed_num;
+    char completed_courses[COURSE_SIZE];
+    int completed_length[LENGTH];
+    char input[INPUT_LEN];
+    
+    i, j, k = 0, 0, 0;
+    pos1, pos2 = 0, 0;
+    can_take = 1;
+    completed_num = 0;
+    res = 0;
+
+    printf("Possible Courses to Take Next\n");
+    while (i < INPUT_LEN) {
+        input[i] = '\0';
+        i = i + 1;
+    }
+    i = 0;
+    while(i < cnt) {
+        pos1 = i * 4 + 2;
+        pos2 = i * 4 + 3;
+        pos1 = length[pos1];
+        pos2 = length[pos2];
+        
+        if (pos2 - pos1 != 1 && courses[pos1+1] != 'F') {
+            
+            pos1 = i * 4;
+            pos2 = i * 4 - 1;
+            pos1 = length[pos1];
+            if (pos2 < 0) { k = 0; }
+            else { k = length[pos2]; }
+            while (k < pos1) {
+                completed_courses[j] = courses[k];
+                
+                j = j + 1;
+                k = k + 1;
+            }
+            completed_length[i] = j;
+            completed_courses[j] = '\0';
+            j = j + 1;
+            completed_num = completed_num + 1;
+        }
+        i = i + 1;
+    }
+
+    i = 0;
+    while (i < cnt) {
+        k = 0;
+        res = 0;
+
+        pos1 = i * 4 + 2;
+        pos2 = i * 4 + 3;
+        pos1 = length[pos1];
+        pos2 = length[pos2];
+        if (pos2 - pos1 != 1 && courses[pos1+1]!='F') res = 0;
+        else {
+            pos1 = i * 4 + 1;
+            pos2 = i * 4 + 2;
+            pos1 = length[pos1];
+            pos2 = length[pos2];
+            j = pos1 + 1;
+            if (pos2 - pos1 == 1) res = 1;
+            while (pos2 - pos1 != 1 && j <= pos2 && res == 0) {
+                if (courses[j] == AND) {
+                    input[k] = '\0';
+                    if(can_take==1){
+                        can_take = check_courses(input[], completed_courses[], completed_num);
+                    }
+                    k = 0;
+                }
+                else if (courses[j] == OR) {
+                    input[k] = '\0';
+                    if(can_take==1){
+                        can_take = check_courses(input[], completed_courses[], completed_num);
+                    }
+                    if (can_take == 1) {
+                        res = 1;
+                    }
+                    can_take = 1;
+                    k = 0;
+                }
+                else if (j == pos2) {
+                    input[k] = '\0';
+                    if(can_take==1){
+                        can_take = check_courses(input[], completed_courses[], completed_num);
+                    }
+                    if (can_take == 1) {
+                        res = 1;
+                    }
+                    can_take = 1;
+                }
+                else {
+                    input[k] = courses[j];
+                    k = k + 1;
+                }
+                j = j + 1;
+            }
+        }
+        
+        if (res == 1) {
+            pos1 = i * 4 - 1;
+            if (pos1 < 0) pos1 = 0;
+            pos2 = i * 4;
+            if (pos1 != 0) pos1 = length[pos1];
+            pos2 = length[pos2];
+            k = 0;
+            while (pos1 < pos2) {
+                input[k] = courses[pos1];
+                k = k + 1;
+                pos1 = pos1 + 1;
+            }
+            input[k] = '\0';
+            printf("  %s\n", input[]);
+        }
+        i = i + 1;
+    }
+
+    return;
+}
+
+func main(void)(ret int)
+{
+    char courses[COURSE_SIZE];
+    int length[LENGTH];
+    int cnt;
+    int i;
+    int l_p;
+    int completed;
+    int remaining;
+    int flag;
+    char c;
+
+    i = 0;
+    l_p = 0;
+    cnt = 0;
+    flag = 2;
+
+    cnt = 0;
+    while(flag != 0){
+        scanf("%c", c);
+        if (c == '\n') {
+            if(flag==2){
+                flag = 0;
+            }else{
+                flag = 2;
+                courses[i] = '\0';
+                length[l_p] = i;
+                l_p = l_p + 1;
+                cnt = cnt + 1;
+            }   
+        }
+        else {
+            flag = 1;
+            courses[i] = c;
+            if (c == '|') {
+                length[l_p] = i;
+                l_p = l_p + 1;
+            }
+            i = i + 1;
+        }
+    }
+    
+    calc_gpa(courses[], length[], cnt);
+    hours_attempted(courses[], length[], cnt);
+    completed = hours_completed(courses[], length[], cnt);
+    remaining = credits_remaining(courses[], length[], cnt, completed);
+    printf("\n");
+    if (remaining == 0) { 
+        printf("Possible Courses to Take Next\n  None - Congratulations!\n"); 
+    }
+    else {
+        courses_to_take(courses[], length[], cnt);
+    }
+
+    return 0;
+}

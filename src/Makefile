@@ -1,30 +1,43 @@
-# mini_test: *.c *.h
-#	gcc -o mini_test *.c -lm
+NAME = mini
 
-# *.c *.h: mini.l mini.y
-#	lex mini.l
-#	yacc -dv mini.y
+LLVM_CONFIG = /usr/lib/llvm-10/bin/llvm-config
 
-CXXFLAGS = -std=c++14 $(NO_WARNING)
+NO_WARNING =  -Wno-return-type \
+	-Wno-switch \
 
-all: mini_test
+CXXFLAGS =  `$(LLVM_CONFIG) --cppflags` -std=c++14 $(NO_WARNING)
+LDFLAGS = `$(LLVM_CONFIG) --ldflags`
+LIBS = `$(LLVM_CONFIG) --libs --system-libs`
 
-parser.cpp: mini.y
-	bison -d -o parser.cpp mini.y
+OBJS = parser.o tokenizer.o ppMacro.o ast.o CodeGenerator.o
+
+all : $(NAME)
+
+parser.cpp: ${NAME}.y
+	bison -d -o parser.cpp ${NAME}.y
 
 parser.hpp: parser.cpp
 
-tokenizer.cpp: mini.l
-	flex -o tokenizer.cpp mini.l
+tokenizer.cpp: ${NAME}.l
+	flex -o tokenizer.cpp ${NAME}.l
 
-%.o: %.cpp
-	g++ -c $(CXXFLAGS) -g -o $@ $<
+%.o: %.cpp ppMacro.h ast.h CodeGenerator.h
+	g++ -c $(CXXFLAGS) -g -o $@ $< 
 
-mini_test: parser.o tokenizer.o
-	g++ -o $@ parser.o tokenizer.o
+$(NAME): $(OBJS)
+	g++ -o $@ $(OBJS) $(LIBS) $(LDFLAGS)
 
+.PHONY: clean
 clean:
-	rm -f parser.cpp parser.hpp tokenizer.cpp
-	rm -f *.o
-run:
-	./mini_test
+	-rm -f *.o
+	-rm -f parser.hpp parser.cpp tokenizer.cpp mini
+	-rm -f *.json
+	-rm -f *.s
+	-rm -f *.ll
+	-rm -f *.out
+	-rm -f *.gcpp
+	-rm -f ../test/*/*.ll
+	-rm -f ../test/*/*.o
+	-rm -f ../test/*/*.gcpp
+	-rm -f ../test/*/*.out
+	

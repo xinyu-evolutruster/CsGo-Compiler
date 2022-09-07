@@ -1,0 +1,90 @@
+#define index(i,j,N) i*N+j
+func ReadOrPrint(M int, N int, A[] int, flag int)(void)
+{
+    int i;
+    int j;
+    i = 0;
+    while(i<M)
+    {
+        j = 0;
+        while(j<N)
+        {
+            if(flag==0)
+            {
+                scanf("%d", A[index(i,j,N)]);
+            }
+            else
+            {
+                printf("%10d", A[index(i,j,N)]);
+            }
+            j = j + 1;
+        }
+        i = i + 1;
+        if(flag!=0)
+        {
+            printf("\n");
+        }
+    }
+    return;
+}
+
+func CalElement(M1 int, N1 int, A1[] int, N2 int, A2[] int, i int, j int)(ret int)
+{
+    int x;
+    int sum_element;
+    int sum;
+
+    x, sum = 0, 0;
+
+    while(x<N1)
+    {
+        sum_element = A1[index(i,x,N1)] * A2[index(x,j,N2)];
+        sum = sum + sum_element;
+        x = x + 1;
+    }
+    return sum;
+}
+
+func Cal(M1 int, N1 int, A1[] int, M2 int, N2 int, A2[] int, R[] int)(void)
+{
+    int i;
+    int j;
+    i = 0;
+    if(N1!=M2)
+    {
+        printf("Incompatible Dimensions\n");
+        return;
+    }
+    while(i<M1)
+    {
+        j = 0;
+        while(j<N2)
+        {
+            R[index(i,j,N2)] = CalElement(M1, N1, A1[], N2, A2[], i, j);
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+    ReadOrPrint(M1, N2, R[], 1);
+    return;
+}
+
+func main(void)(ret int)
+{
+    int N1;
+    int M1;
+    int N2;
+    int M2;
+    int A1[400];
+    int A2[400];
+    int R[400];
+
+    scanf("%d %d", M1, N1);
+    ReadOrPrint(M1, N1, A1[], 0);
+    scanf("%d %d", M2, N2);
+    ReadOrPrint(M2, N2, A2[], 0);
+
+    Cal(M1, N1, A1[], M2, N2, A2[], R[]);
+    
+    return 0;
+}
