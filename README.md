@@ -125,15 +125,6 @@ To learn more about the CsGo language, check [ebnf.md](./ebnf.md) to see all def
   - tree.html：visualization of the AST
 
 - test: stores the test cases
-  
-  to perform the test, run
-  ```shell
-  ./mini {filename}.gc -o {filename}.out
-  linux-amd64 {filename}.out
-  ```
-
-  or just run the `gentest.sh` file to view all tests results.
-
   - qsort
     - qsort.gc：implements quick sort
     - linux-amd64：the test file
