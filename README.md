@@ -23,25 +23,25 @@ The CsGo compiler compiles a self-designed language with features in both C and 
 To install, first download the project by
 
 ```shell
-$> git clone https://github.com/xinyu-evolutruster/CsGo-Compiler.git
+git clone https://github.com/xinyu-evolutruster/CsGo-Compiler.git
 ```
 
 Then run
 
 ```shell
-$> cd ./src
+cd ./src
 ```
 to the main directory. Compile the project by running
 
 ```shell
-$> make
+make
 # the compiler program is named 'mini'
 ```
 To compile your program, run 
 
 ```shell
-$> ./mini {filename}.gc
-$> clang {filename}.o -o filename.out
+./mini {filename}.gc
+clang {filename}.o -o filename.out
 ```
 
 ### File Description
@@ -81,8 +81,8 @@ $> clang {filename}.o -o filename.out
   
   to perform the test, run
   ```shell
-  $> ./mini {filename}.gc -o {filename}.out
-  $> linux-amd64 {filename}.out
+  ./mini {filename}.gc -o {filename}.out
+  linux-amd64 {filename}.out
   ```
 
   or just run the `gentest.sh` file to view all tests results.
@@ -98,15 +98,3 @@ $> clang {filename}.o -o filename.out
   - course_assist
     - c_assist.gc：implements a program to assist in online course selection
     - linux-amd64：the test file
-
-### 1.5 运行方式
-
-可使用测试脚本`gentest.sh`运行提供的测试程序
-
-```shell
-cd ./src
-make
-./mini filename.gc
-clang filename.o -o filename.out
-```
-
