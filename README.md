@@ -1,14 +1,13 @@
 # CsGo
-The CsGo compiler compiles a self-designed language with features in both C and Golang, using flex, bison and LLVM.
+
 ## Introduction
-
-
-## Grammar Rules
+The CsGo compiler compiles a self-designed language with features in both C and Golang, using flex, bison and LLVM.
 
 ## Features
 
-- C macros
-- function calls
+- C macros (supports variadic macro)
+- function calls (supports recursion)
+- arrays
 - multiple variable assignment
 - AST visualization
 
@@ -43,6 +42,56 @@ To compile your program, run
 ./mini {filename}.gc
 clang {filename}.o -o filename.out
 ```
+## Grammar Rules
+
+variable declaration:
+```C
+int num;
+int arr[100];
+```
+
+variable assignment:
+```C
+num = 1;
+i, j, k = 1, 2, 3;
+i, j, k = begin, end, arr[begin];
+```
+
+function declaration:
+```go
+// func {func_name}({var_name}{var_type}, ...)(ret {var_type})
+
+func main(void)(ret int);
+func qsort(arr[] int, begin int, end int)(void);
+```
+
+I/O operations:
+```C
+scanf("%d", len);
+printf("%d\n", arr[i]);
+```
+
+conditional statements:
+```C
+if(i<j){
+  arr[i]=arr[j];
+}
+```
+
+loop statements:
+```C
+while(i<j){
+  arr[i]=key;
+  i=i+1;
+}
+```
+macros:
+```C
+#define ZERO 0
+#define index(i,j,N) (i*N+j)
+```
+
+To learn more about the CsGo language, check [ebnf.md](./ebnf.md) to see all definitions.
 
 ### File Description
 
